@@ -1,0 +1,18 @@
+from sqlalchemy import String, ForeignKey, DateTime, func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from src.database import Base
+
+class Chat(Base):
+    __tablename__ = "chats"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    created_at: Mapped[str] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    messages = relationship(
+        "Message",
+        back_populates="chat",
+        cascade="all, delete-orphan"
+    )
